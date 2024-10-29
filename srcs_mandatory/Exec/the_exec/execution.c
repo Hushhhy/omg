@@ -84,6 +84,11 @@ int	executor(t_ms *ms)
 	int	v_return;
 
 	v_return = 0;
+	if (ms->hd == true)
+	{
+		ms->hd = false;
+		return (130);
+	}
 	ms->envi = the_env(ms->env);
 	if (ms->envi == NULL)
 	{

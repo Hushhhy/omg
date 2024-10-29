@@ -32,7 +32,7 @@ void	read_and_write_lines(t_ms *ms, char *filename, char *limiter, int saved_std
 	char	*line;
 
 	signal(SIGQUIT, SIG_IGN);
-	// signal(SIGINT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		line = readline("> ");
@@ -53,6 +53,9 @@ void	read_and_write_lines(t_ms *ms, char *filename, char *limiter, int saved_std
 		write_line_to_file(ms, line);
 		free(line);
 	}
+    close(ms->here_doc_fd);
+    dup2(saved_stdin, STDIN_FILENO);
+    close(saved_stdin);
 }
 
 void	handle_child_process(t_ms *ms, t_token *limiter, char *tmp_file)
@@ -66,9 +69,10 @@ void	handle_child_process(t_ms *ms, t_token *limiter, char *tmp_file)
 		perror("Fork failed");
 		exit(EXIT_FAILURE);
 	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
 		int saved_stdin = dup(STDIN_FILENO);
 		ms->here_doc_fd = open(tmp_file, O_WRONLY | O_APPEND);
 		if (ms->here_doc_fd == -1)
@@ -77,8 +81,6 @@ void	handle_child_process(t_ms *ms, t_token *limiter, char *tmp_file)
 			exit(EXIT_FAILURE);
 		}
 		read_and_write_lines(ms, tmp_file, limiter->value, saved_stdin);
-		close(ms->here_doc_fd);
-		close(saved_stdin);
 		exit(0);
 	}
 	else
@@ -122,6 +124,7 @@ void	handle_here_doc(t_ms *ms, t_token **tokens)
 	{
 		if (g_var == CTRL_C)
 		{
+			ms->hd = true;
 			ms->v_return = CTRL_C;
 			break;
 		}

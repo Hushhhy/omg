@@ -154,6 +154,7 @@ typedef struct s_ms
 	int			v_return;
 	int			c_count;
 	bool		b;
+	bool		hd;
 	int			here_doc_fd;
 }				t_ms;
 

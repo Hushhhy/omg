@@ -97,18 +97,10 @@ void	the_program(t_ms *ms)
 		if (full_check(ms) == false)
 			continue ;
 		handle_here_doc(ms, &ms->tokens);
-		if (ms->v_return == CTRL_C)
-		{
-			ms->v_return = 0;
-			g_var = 0;
-			continue ;
-		}
 		if (ms->tokens)
-		{
 			ms->v_return = executor(ms);
-			free_tokens(&ms->tokens);
-		}
 		free(ms->prompt);
+		free_tokens(&ms->tokens);
 		delete_tmp_files();
 	}
 	free_env(&ms->env);
