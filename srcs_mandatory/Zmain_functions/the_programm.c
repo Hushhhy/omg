@@ -66,6 +66,7 @@ t_ms	*init_ms(void)
 	ms->previous_fd = -1;
 	ms->pipefd[0] = -1;
 	ms->pipefd[1] = -1;
+	ms->hd = false;
 	ms->here_doc_fd = -1;
 	return (ms);
 }

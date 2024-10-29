@@ -35,7 +35,7 @@ void	sigint_heredoc(int sig)
 {
 	(void)sig;
 	g_var = CTRL_C;
-	write(1, "\n", 1);
+	ft_putstr_fd("\n", 1);
     rl_replace_line("", 0);
     rl_redisplay();
 }

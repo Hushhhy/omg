@@ -69,10 +69,10 @@ void	handle_child_process(t_ms *ms, t_token *limiter, char *tmp_file)
 		perror("Fork failed");
 		exit(EXIT_FAILURE);
 	}
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		int saved_stdin = dup(STDIN_FILENO);
 		ms->here_doc_fd = open(tmp_file, O_WRONLY | O_APPEND);
 		if (ms->here_doc_fd == -1)
