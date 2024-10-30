@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:07:42 by acarpent          #+#    #+#             */
-/*   Updated: 2024/10/30 16:00:15 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:35:18 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,17 @@ void	clean_hd_child(t_ms *ms)
 
 void clear_program(t_ms *ms)
 {
-	free_tokens(&ms->tokens);
-	free_env(&ms->env);
-	free(ms->prompt);
-	free(ms);
+	close_all_fds();
+	if (ms->cmdlines)
+		clear_cmdlines(&ms->cmdlines);
+	if (ms->envi)
+		ft_free_tab(ms->envi);
+	if (ms->tokens)
+		free_tokens(&ms->tokens);
+	if (ms->env)
+		free_env(&ms->env);
+	if (ms->prompt)
+		free(ms->prompt);
+	if (ms)
+		free(ms);
 }

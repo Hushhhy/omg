@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 21:05:06 by codespace         #+#    #+#             */
-/*   Updated: 2024/10/30 16:04:07 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:24:13 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ void	process_current_token(t_ms *ms, t_token *current)
 		if (limiter != NULL && limiter->type == LIMITER)
 		{
 			tmp_file = create_tmp_file(ms);
+			if (!tmp_file)
+				return ;
 			if (tmp_file != NULL)
 			{
 				handle_child_process(ms, limiter, tmp_file);
