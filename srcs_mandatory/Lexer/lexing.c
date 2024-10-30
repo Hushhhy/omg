@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrellie <pgrellie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 17:35:23 by pgrellie          #+#    #+#             */
-/*   Updated: 2024/10/17 18:33:11 by pgrellie         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:39:21 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,21 @@
 
 void	handle_separator(char *s, int *x, t_token **tok)
 {
-	int	i;
+	char	*tmp;
+	int		i;
 
 	i = *x;
+	tmp = NULL;
 	if ((s[*x] == '<' && s[*x + 1] == '<')
 		|| (s[*x] == '>' && s[*x + 1] == '>'))
 		*x += 2;
 	else
 		*x += 1;
-	add_token(tok, ft_substr(s, i, *x - i));
+	tmp = ft_substr(s, i, *x - i);
+	if (!tmp)
+		return ;
+	add_token(tok, tmp);
+	free(tmp);
 }
 
 // Fonction pour gérer les mots

@@ -6,7 +6,7 @@
 #    By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/18 14:56:45 by pgrellie          #+#    #+#              #
-#    Updated: 2024/10/29 18:35:05 by acarpent         ###   ########.fr        #
+#    Updated: 2024/10/30 13:34:19 by acarpent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ SRCS_FILES = Builtins/builtins.c\
 				Environnement/the_env.c\
 				Exec/the_exec/cmd_exec_in_child.c\
 				Exec/the_exec/cmd_path.c\
+				Exec/the_exec/execution_utils2.c\
 				Exec/the_exec/execution_utils.c\
 				Exec/the_exec/execution.c\
 				Exec/the_exec/file_opener_utils.c\
@@ -91,6 +92,7 @@ SRCS_FILES = Builtins/builtins.c\
 				Expands/expands_utils.c\
 				Expands/malloc_calculator.c\
 				Expands/the_expander.c\
+				Here_doc/here_doc_utils3.c\
 				Here_doc/here_doc_utils_2d.c\
 				Here_doc/here_doc_utils.c\
 				Here_doc/here_doc.c\

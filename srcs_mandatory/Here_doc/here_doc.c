@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 21:05:06 by codespace         #+#    #+#             */
-/*   Updated: 2024/10/29 19:47:26 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:04:07 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ char	*create_tmp_file(t_ms *ms)
 	return (filename);
 }
 
-void	read_and_write_lines(t_ms *ms, char *filename, char *limiter, int saved_stdin)
+void	read_and_write_lines(t_ms *ms, char *filename,
+	char *limiter, int saved_stdin)
 {
 	char	*line;
 
@@ -41,50 +42,45 @@ void	read_and_write_lines(t_ms *ms, char *filename, char *limiter, int saved_std
 			handle_null_line(ms, filename, limiter);
 			close(ms->here_doc_fd);
 			if (g_var == CTRL_C)
-			{
-				dup2(saved_stdin, STDIN_FILENO);
-				close_all_fds();
-				return;
-			}
-			return;
+				return (save_std(saved_stdin));
+			return ;
 		}
 		if (line && check_line_against_limiter(line, limiter))
-			break;
+			break ;
 		write_line_to_file(ms, line);
 		free(line);
 	}
-    close(ms->here_doc_fd);
-    dup2(saved_stdin, STDIN_FILENO);
-    close(saved_stdin);
+	close(ms->here_doc_fd);
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdin);
 }
 
 void	handle_child_process(t_ms *ms, t_token *limiter, char *tmp_file)
 {
 	pid_t	pid;
 	int		status;
+	int		saved_stdin;
 
+	saved_stdin = 0;
 	pid = fork();
 	if (pid < 0)
 	{
 		perror("Fork failed");
+		clean_hd_child(ms);
+		delete_tmp_files();
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_IGN);
-		int saved_stdin = dup(STDIN_FILENO);
-		ms->here_doc_fd = open(tmp_file, O_WRONLY | O_APPEND);
-		if (ms->here_doc_fd == -1)
-		{
-			perror("Error opening temp file in child");
-			exit(EXIT_FAILURE);
-		}
-		read_and_write_lines(ms, tmp_file, limiter->value, saved_stdin);
-		exit(0);
+		zero_pid_handle(saved_stdin, tmp_file, limiter, ms);
+		delete_tmp_files();
+		clean_hd_child(ms);
 	}
 	else
 	{
+		close_all_fds();
 		signal(SIGINT, sigint_heredoc);
 		waitpid(pid, &status, 0);
 	}
@@ -117,7 +113,7 @@ void	handle_here_doc(t_ms *ms, t_token **tokens)
 	t_token	*current;
 
 	current = *tokens;
-	here_doc_count(current);
+	here_doc_count(ms, current);
 	if (g_var == CTRL_C)
 		g_var = 0;
 	while (current != NULL)
@@ -126,7 +122,7 @@ void	handle_here_doc(t_ms *ms, t_token **tokens)
 		{
 			ms->hd = true;
 			ms->v_return = CTRL_C;
-			break;
+			break ;
 		}
 		process_current_token(ms, current);
 		current = current->next;

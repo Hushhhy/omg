@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 15:22:22 by pgrellie          #+#    #+#             */
-/*   Updated: 2024/10/29 18:20:17 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:29:15 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,9 +249,10 @@ void			expander(t_ms *ms);
 //------------Builtins-----------//
 
 int				builtins(t_ms *ms);
+int				builtins_part(t_ms *ms, t_cmdline *current);
 int				builtins_checker(t_ms *ms);
 int				mini_builtins(t_ms *ms);
-int				builtins_part(t_ms *ms, t_cmdline *current);
+int				mini_builtins_parts(t_ms *ms, t_cmdline *current);
 int				ft_echo(t_cmdline *cmdline);
 bool			only_n(char *s);
 int				ft_cd(t_cmdline *cmdline);
@@ -279,17 +280,23 @@ void			del_node(t_env *env, t_env *delete);
 
 //------------Here doc-----------//
 
+void			clean_hd_child(t_ms *ms);
 void			close_all_fds(void);
 void			delete_tmp_files(void);
 char			*find_tmp_filename(void);
 void			eof_display(char *limiter);
 char			*create_filename(void);
-void			here_doc_count(t_token *tok);
+void			here_doc_count(t_ms *ms, t_token *tok);
 int				open_file(t_ms *ms, char *filename);
 char			*handle_null_line(t_ms *ms, char *filename, char *limiter);
 void			write_line_to_file(t_ms *ms, char *line);
 int				check_line_against_limiter(char *line, char *limiter);
 void			handle_here_doc(t_ms *ms, t_token **tokens);
+void			save_std(int saved_stdin);
+void			zero_pid_handle(int saved_stdin, char *tmp_file,
+					t_token *limiter, t_ms *ms);
+void			read_and_write_lines(t_ms *ms, char *filename,
+					char *limiter, int saved_stdin);
 
 //-------------Exec--------------//
 
@@ -310,8 +317,8 @@ void			_maybe_fd_closing(int fd);
 
 int				is_only_redirections(t_cmdline *cmdline);
 int				cmdlines_counter(t_cmdline *cmdline);
-void			handle_exec_error(void);
-void			ft_open_files(t_ms*ms);
+void			handle_exec_error(t_ms *ms);
+void			ft_open_files(t_ms *ms);
 void			redirector(t_ms *ms);
 char			*env_for_exec(char **envi, char *cmd);
 char			*cmd_path(char **envi, char *cmd);
@@ -321,5 +328,11 @@ int				waiting_(t_ms *ms, int v_ret);
 void			child_process(t_ms *ms);
 int				executioner(t_ms *ms);
 int				executor(t_ms *ms);
+void			close_and_free(t_ms *ms);
+
+//------------Cleaning-------------//
+
+void			clean_child(t_ms *ms);
+void 			clear_program(t_ms *ms);
 
 #endif

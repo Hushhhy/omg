@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc_calculator.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrellie <pgrellie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 15:38:14 by pgrellie          #+#    #+#             */
-/*   Updated: 2024/10/28 15:03:44 by pgrellie         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:14:45 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,14 @@ static size_t	handle_dollar_dollar(int *x)
 
 static size_t	handle_dollar_question(int v_return, int *x)
 {
+	char	*v_ret;
+	int		len;
+
 	*x += 2;
-	return (ft_strlen(ft_itoa(v_return)));
+	v_ret = ft_itoa(v_return);
+	len = ft_strlen(v_ret);
+	free(v_ret);
+	return (len);
 }
 
 static size_t	handle_env_variable(char *value, int *x, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 22:43:36 by codespace         #+#    #+#             */
-/*   Updated: 2024/10/29 18:19:59 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 14:11:31 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,18 @@ void	redirector(t_ms *ms)
 	close(ms->pipefd[1]);
 }
 
-void	handle_exec_error(void)
+void	handle_exec_error(t_ms *ms)
 {
 	if (errno == ENOENT)
 	{
 		ft_putstr_fd("MYSHELL : No such file or directory\n", 2);
+		clean_child(ms);
 		exit(127);
 	}
 	else if (errno == EACCES)
 	{
 		ft_putstr_fd("MYSHELL : Permission denied\n", 2);
+		clean_child(ms);
 		exit(126);
 	}
 	else

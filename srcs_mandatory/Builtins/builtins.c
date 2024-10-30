@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:28:17 by acarpent          #+#    #+#             */
-/*   Updated: 2024/10/29 14:12:00 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:39:18 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int	builtins_checker(t_ms *ms)
 			return (0);
 		else if (ft_strcmp(current->cmd->cmds[0], "exit") == 0)
 			return (0);
+		else if (ft_strcmp(current->cmd->cmds[0], "cd") == 0)
+			return (0);
 	}
 	return (1);
 }
@@ -104,10 +106,22 @@ int	mini_builtins(t_ms *ms)
 		ms->b = true;
 		return (ft_pwd());
 	}
-	else if (ft_strcmp(current->cmd->cmds[0], "exit") == 0)
+	if (mini_builtins_parts(ms, current))
+		return (1);
+	return (0);
+}
+
+int	mini_builtins_parts(t_ms *ms, t_cmdline *current)
+{
+	if (ft_strcmp(current->cmd->cmds[0], "exit") == 0)
 	{
 		ms->b = true;
 		ft_exit(current);
+	}
+	else if (ft_strcmp(current->cmd->cmds[0], "cd") == 0)
+	{
+		ms->b = true;
+		return (ft_cd(current));
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 14:47:02 by codespace         #+#    #+#             */
-/*   Updated: 2024/10/29 18:32:48 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:01:23 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,14 @@ int	bb_executioner(t_ms *ms)
 	{
 		ms->pid[0] = fork();
 		if (ms->pid[0] == -1)
+		{
+			clean_child(ms);
 			exit(1);
+		}
 		if (ms->pid[0] == 0)
 		{
 			ft_open_files(ms);
+			clean_child(ms);
 			exit(0);
 		}
 		v_ret = mini_builtins(ms);
@@ -65,7 +69,10 @@ int	executioner(t_ms *ms)
 		pipe(ms->pipefd);
 		ms->pid[x] = fork();
 		if (ms->pid[x] == -1)
+		{
+			clean_child(ms);
 			exit(1);
+		}
 		signal(SIGQUIT, ft_sigquit_child);
 		signal(SIGINT, child_sigint);
 		if (ms->pid[x] == 0)
@@ -104,10 +111,6 @@ int	executor(t_ms *ms)
 		v_return = bb_executioner(ms);
 	if (ms->b == false)
 		v_return = executioner(ms);
-	clear_cmdlines(&ms->cmdlines);
-	ft_free_tab(ms->envi);
-	free(ms->pid);
-	close(ms->pipefd[0]);
-	close(ms->pipefd[1]);
+	close_and_free(ms);
 	return (v_return);
 }

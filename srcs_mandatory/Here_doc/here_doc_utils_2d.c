@@ -6,7 +6,7 @@
 /*   By: acarpent <acarpent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 22:18:59 by codespace         #+#    #+#             */
-/*   Updated: 2024/10/29 15:04:42 by acarpent         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:29:03 by acarpent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ char	*find_tmp_filename(void)
 
 void	eof_display(char *limiter)
 {
-	ft_putstr_fd("MYSHELL: warning: here-document.delimited by end-of-file (wanted `", 2);
+	ft_putstr_fd("MYSHELL: warning: ", 2);
+	ft_putstr_fd("here-document delimited by end-of-file (wanted `", 2);
 	ft_putstr_fd(limiter, 2);
 	ft_putstr_fd("')\n", 2);
 }
 
-void	here_doc_count(t_token *tok)
+void	here_doc_count(t_ms *ms, t_token *tok)
 {
 	t_token	*here;
 	int		x;
@@ -79,6 +80,7 @@ void	here_doc_count(t_token *tok)
 			{
 				ft_putstr_fd("minishell: maximum here-document ", 2);
 				ft_putstr_fd("count exceeded\n", 2);
+				clear_program(ms);
 				exit(2);
 			}
 			x++;
